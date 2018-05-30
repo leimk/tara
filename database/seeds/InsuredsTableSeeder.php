@@ -18,18 +18,18 @@ class InsuredsTableSeeder extends Seeder
       for ($i = 0; $i < $limit; $i++)
       {
         $name         = $faker->unique()->name;
-        $nik          = $faker->unique()->nik;
+        $noKontrak    = $faker->unique()->creditCardNumber();
         $periodeAkhir = $faker->unique()->dateTimeBetween($startDate = '+6 months', $endDate ='+1 years',$timezone = 'Asia/Jakarta');
         $periodeAkhir = $periodeAkhir->format('Y-m-d');
-        $key = $name.'|'.$nik.'|'.$periodeAkhir;
+        $key = $name.'|'.$noKontrak.'|'.$periodeAkhir;
         DB::table('insureds')->insert([
-          'noKontrak'         =>  $faker->creditCardNumber(),
+          'noKontrak'         =>  $noKontrak,
           'besaranPinjaman'   =>  $faker->numberBetween($min = 1000000, $max = 200000000),
           'periodeAwal'       =>  '2018-05-30',
           'periodeAkhir'      =>  $periodeAkhir,
           'namaPeserta'       =>  $name,
           'tglLahir'          =>  $faker->dateTimeThisCentury($max = '-17 years', $timezone=null),
-          'noKTP'             =>  $nik,
+          'noKTP'             =>  $faker->unique()->nik,
           'alamat'            =>  $faker->address(),
           'noTel'             =>  $faker->phoneNumber(),
           'rate_id'           =>  $faker->numberBetween(1,12),
