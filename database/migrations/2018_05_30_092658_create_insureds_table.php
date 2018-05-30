@@ -15,7 +15,7 @@ class CreateInsuredsTable extends Migration
     {
         Schema::create('insureds', function (Blueprint $table) {
             $table->increments('idPesertaTaralite');
-            $table->integer('noKontrak');
+            $table->string('noKontrak');
             $table->double('besaranPinjaman');
             $table->date('periodeAwal');
             $table->date('periodeAkhir');
@@ -23,7 +23,7 @@ class CreateInsuredsTable extends Migration
             $table->date('tglLahir');
             $table->string('noKTP',20);
             $table->text('alamat');
-            $table->char('noTel',15);
+            $table->char('noTel',20);
             $table->integer('rate_id')->unsigned();
             $table->foreign('rate_id')->references('idRate')->on('rates');
             $table->string('key')->unique();
