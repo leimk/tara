@@ -17,6 +17,10 @@ use Illuminate\Http\Request;
 //     return $request->user();
 // });
 
-Route::get('/user', function(Request $request) {
-    return $request->user();
-})->middleware('client');
+// Route::get('/user', function(Request $request) {
+//     return $request->user();
+// })->middleware('client');
+
+Route::middleware('client')->group( function () {
+	Route::resource('insureds', 'InsuredController');
+});
