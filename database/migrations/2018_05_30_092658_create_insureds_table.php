@@ -15,7 +15,7 @@ class CreateInsuredsTable extends Migration
     {
         Schema::create('insureds', function (Blueprint $table) {
             $table->increments('idPesertaTaralite');
-            $table->string('noKontrak');
+            $table->string('noKontrak')->unique();
             $table->double('besaranPinjaman');
             $table->date('periodeAwal');
             $table->date('periodeAkhir');

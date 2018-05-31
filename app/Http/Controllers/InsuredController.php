@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Insured;
 use Validator;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class InsuredController extends Controller
 {
@@ -18,10 +20,41 @@ class InsuredController extends Controller
    public function store(Request $request)
     {
         $input = $request->all();
-        $input['key'] = $request['namaPeserta'].'|'.$request['noKontrak'].'|'.$request['periodeAkhir'];
+        $input['key'] = $request['noKTP'].'|'.$request['periodeAkhir'];
+
+        $cari = DB::table('insureds')
+                ->select('key','noKontrak')
+                ->where([
+                          ['noKTP','=',$input['noKTP']],
+                          ['periodeAkhir','>',now()]
+                        ])
+                ->get();
+        $noK ='';
+        if(count($cari)>0)
+        {
+          foreach($cari as $item){
+            $noK .= $item->noKontrak.', ';
+            $noKontrak[] = $item->noKontrak;
+          }
+          // $noK = explode('|',$cari[0]->key);
+          // $pDB = new Carbon($noK[1]);
+        //   if($pDB>now()){
+            return response()->json(['data' => 'Terdapat Pinjaman yang masih berjalan dengan No Kontrak : '.$noK, 'noKontrak' => $noKontrak, 422],422);
+          // }
+        }
+        $periodeAwal = new Carbon($input['periodeAwal']);
+        $periodeAkhir= new Carbon($input['periodeAkhir']);
+        $diff = $periodeAwal->diff($periodeAkhir);
+        $diff = ($diff->format('%y')*12) + $diff->format('%m');
+        $rate = DB::table('rates')
+                ->where('idRate',$diff)
+                ->pluck('rate');
+        $input['rate'] = $rate;
+
 
         //TODO : VALIDATION FORMATS!
-        
+
+        // $input['diff'] = $diff;
         $validator = Validator::make($input, [
             'noKontrak'       =>  'required',
             'besaranPinjaman' =>  'required',
