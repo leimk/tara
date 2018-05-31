@@ -9,7 +9,7 @@ use Carbon\Carbon;
 
 class RateController extends Controller
 {
-  public function index($pawal,$pakhir)
+  public function index($pawal,$pakhir,$tsi)
    {
      $periodeAwal = new Carbon($pawal);
      $periodeAkhir= new Carbon($pakhir);
@@ -21,6 +21,7 @@ class RateController extends Controller
      $rate = DB::table('rates')
              ->where('idRate',$diff)
              ->pluck('rate');
-       return response()->json(['data' => $rate , 'code' => 200],200);
+      $premi = $rate[0] * 100 * $tsi;
+       return response()->json(['data' => $premi , 'code' => 200],200);
    }
 }

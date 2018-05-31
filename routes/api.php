@@ -25,8 +25,12 @@ Route::middleware('client')->group( function () {
 	Route::resource('insureds', 'InsuredController',['only' => ['index','store']]);
 	Route::resource('rates', 'RateController',['only' => ['index']]);
 
-	Route::get('rates/{pawal}/{pakhir}',[
-			'as'		=>	'rates.index',
+	Route::get('rates/premi/{pawal}/{pakhir}/{tsi}',[
+			'as'		=>	'rates.premi.index',
 			'uses'	=>	'RateController@index'
 	]);
+});
+
+Route::fallback(function(){
+    return response()->json(['message' => 'Not Found!'], 404);
 });
