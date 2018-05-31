@@ -22,5 +22,11 @@ use Illuminate\Http\Request;
 // })->middleware('client');
 
 Route::middleware('client')->group( function () {
-	Route::resource('insureds', 'InsuredController');
+	Route::resource('insureds', 'InsuredController',['only' => ['index','store']]);
+	Route::resource('rates', 'RateController',['only' => ['index']]);
+
+	Route::get('rates/{pawal}/{pakhir}',[
+			'as'		=>	'rates.index',
+			'uses'	=>	'RateController@index'
+	]);
 });
