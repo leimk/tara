@@ -19,6 +19,7 @@ class InsuredController extends Controller
 
    public function store(Request $request)
     {
+        date_default_timezone_set('Asia/Jakarta');
         $input = $request->all();
         $input['key'] = $request['noKTP'].'|'.$request['periodeAkhir'];
 
@@ -45,11 +46,12 @@ class InsuredController extends Controller
         $periodeAwal = new Carbon($input['periodeAwal']);
         $periodeAkhir= new Carbon($input['periodeAkhir']);
         $diff = $periodeAwal->diff($periodeAkhir);
-        $diff = ($diff->format('%y')*12) + $diff->format('%m');
-        $rate = DB::table('rates')
-                ->where('idRate',$diff)
-                ->pluck('rate');
-        $input['rate'] = $rate;
+        $diff = round(($diff->format('%y')*12) + $diff->format('%m') + ($diff->format('%d')/30));
+        $input['rate_id'] = $diff;
+        // $rate = DB::table('rates')
+        //         ->where('idRate',$diff)
+        //         ->pluck('rate');
+        // $input['rate'] = $rate;
 
 
         //TODO : VALIDATION FORMATS!

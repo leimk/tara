@@ -1,5 +1,5 @@
 <?php
-
+date_default_timezone_set('Asia/Jakarta');
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
