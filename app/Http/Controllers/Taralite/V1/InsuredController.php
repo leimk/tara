@@ -8,8 +8,6 @@ use App\Insured;
 use Validator;
 use Carbon\Carbon;
 
-date_default_timezone_set('Asia/Jakarta');
-
 class InsuredController extends Controller
 {
   // public function getIp(){
@@ -41,15 +39,29 @@ class InsuredController extends Controller
               ->whereBetween('created_at',array($cAwal.' 00:00:00',$cAkhir.' 23:59:59'))
               ->get();
          if (count($insureds) == 0)
-          return response()->json(['message'=>'No data Found', 200],200);
-
+            return response()->json(['message'=>'No data Found', 200],200);
        } catch (\Exception $e) {
-
-         return response()->json($e,404);
+          return response()->json($e,404);
        }
 
       return response()->json(['data' => $insureds, 'ip' => $ip, 'code' => 200], 200);
    }
+
+   public function show($noKontrak)
+    {
+        $ip = \Request::ip();
+        // $ip = $this->getIp();
+        try{
+          $insureds = DB::table('insureds')
+               ->where('noKontrak',$noKontrak)
+               ->get();
+          if (count($insureds) == 0)
+            return response()->json(['message'=>'No data Found', 404],404);
+        } catch (\Exception $e) {
+            return response()->json($e,404);
+        }
+       return response()->json(['data' => $insureds, 'ip' => $ip, 'code' => 200], 200);
+    }
 
    public function store(Request $request)
     {

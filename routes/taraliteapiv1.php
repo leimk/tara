@@ -26,7 +26,12 @@ Route::middleware('client')->group( function () {
 			'as'		=>	'insureds.index',
 			'uses'	=>	'InsuredController@index'
 		]);
+		Route::get('insureds/{noKontrak}', [
+				'as'		=>	'insureds.show',
+				'uses'	=>	'InsuredController@show'
+			]);
 	Route::resource('insureds', 'InsuredController',['only' => ['store']]);
+	Route::resource('endors', 'EndorsController', ['only'=> ['store']]);
 	Route::resource('rates', 'RateController',['only' => ['index']]);
 	Route::get('premi/{pawal}/{pakhir}/{tsi}',[
 			'as'		=>	'premi.index',

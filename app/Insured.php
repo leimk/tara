@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Insured extends Model
 {
   protected $fillable = [
-      'eNoKontrak', 'besaranPinjaman', 'periodeAwal', 'periodeAkhir', 'namaPeserta',
+      'noKontrak', 'besaranPinjaman', 'periodeAwal', 'periodeAkhir', 'namaPeserta',
       'tglLahir', 'noKTP', 'alamat', 'noTel','rate_id','key'
   ];
 
