@@ -8,18 +8,37 @@ use Validator;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+date_default_timezone_set('Asia/Jakarta');
+
 class InsuredController extends Controller
 {
-  public function index()
+  public function index($cAwal,$cAkhir)
    {
-       $insured = Insured::all();
+        // $insured = Insured::all();
+       // return response()->json(['data' => $insured, 'code' => 200],200);
+       $cAwal = new Carbon($cAwal);
+       $cAkhir= new Carbon($cAkhir);
+       $cAwal = $cAwal->format('Y-m-d');
+       $cAkhir = $cAkhir->format('Y-m-d');
 
-       return response()->json(['data' => $insured, 'code' => 200],200);
+       try{
+
+         $insureds = DB::table('insureds')
+              ->whereBetween('created_at',array($cAwal.' 00:00:00',$cAkhir.' 23:59:59'))
+              ->get();
+         if (count($insureds) == 0)
+          return response()->json(['message'=>'No data Found', 200],200);
+
+       } catch (\Exception $e) {
+
+         return response()->json($e,404);
+       }
+
+      return response()->json(['data' => $insureds,'code' => 200], 200);
    }
 
    public function store(Request $request)
     {
-        date_default_timezone_set('Asia/Jakarta');
         $input = $request->all();
         $input['key'] = $request['noKTP'].'|'.$request['periodeAkhir'];
 
@@ -30,6 +49,7 @@ class InsuredController extends Controller
                           ['periodeAkhir','>',now()]
                         ])
                 ->get();
+
         $noK ='';
         if(count($cari)>0)
         {
@@ -37,26 +57,17 @@ class InsuredController extends Controller
             $noK .= $item->noKontrak.', ';
             $noKontrak[] = $item->noKontrak;
           }
-          // $noK = explode('|',$cari[0]->key);
-          // $pDB = new Carbon($noK[1]);
-        //   if($pDB>now()){
-            return response()->json(['data' => 'Terdapat Pinjaman yang masih berjalan dengan No Kontrak : '.$noK, 'noKontrak' => $noKontrak, 422],422);
-          // }
+          return response()->json(['message' => 'Terdapat Pinjaman yang masih berjalan dengan No Kontrak : '.$noK, 'noKontrak' => $noKontrak, 422],422);
         }
+
         $periodeAwal = new Carbon($input['periodeAwal']);
         $periodeAkhir= new Carbon($input['periodeAkhir']);
         $diff = $periodeAwal->diff($periodeAkhir);
         $diff = round(($diff->format('%y')*12) + $diff->format('%m') + ($diff->format('%d')/30));
         $input['rate_id'] = $diff;
-        // $rate = DB::table('rates')
-        //         ->where('idRate',$diff)
-        //         ->pluck('rate');
-        // $input['rate'] = $rate;
-
 
         //TODO : VALIDATION FORMATS!
 
-        // $input['diff'] = $diff;
         $validator = Validator::make($input, [
             'noKontrak'       =>  'required',
             'besaranPinjaman' =>  'required',
@@ -71,17 +82,17 @@ class InsuredController extends Controller
             'key'             =>  'required'
         ]);
 
-        if($validator->fails()){
-            return response()->json(['data' => 'Validation Error', 'errMsg' => $validator->errors(), 422],422);
-        }
+        if($validator->fails())
+            return response()->json(['message' => 'Validation Error '.$validator->errors(), 422],422);
+
+
         try{
             $insured = Insured::create($input);
         } catch (\Exception $e){
-
             // $errorCode = $e->errorInfo[2];
             //
             // if($errorCode == 1062){
-                return response()->json(['data' => $e->errorInfo[2], 422],422);
+                return response()->json(['message' => $e->errorInfo[2], 422],422);
             // }
         }
 

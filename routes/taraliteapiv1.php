@@ -22,10 +22,14 @@ use Illuminate\Http\Request;
 // })->middleware('client');
 
 Route::middleware('client')->group( function () {
-	Route::resource('insureds', 'InsuredController',['only' => ['index','store']]);
+	Route::get('insureds/{cawal}/{cakhir}', [
+			'as'		=>	'insureds.index',
+			'uses'	=>	'InsuredController@index'
+		]);
+	Route::resource('insureds', 'InsuredController',['only' => ['store']]);
 	Route::resource('rates', 'RateController',['only' => ['index']]);
-	Route::get('rates/premi/{pawal}/{pakhir}/{tsi}',[
-			'as'		=>	'rates.premi.index',
+	Route::get('premi/{pawal}/{pakhir}/{tsi}',[
+			'as'		=>	'premi.index',
 			'uses'	=>	'RateController@index'
 	]);
 });

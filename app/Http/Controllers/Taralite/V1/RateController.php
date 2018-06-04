@@ -22,7 +22,14 @@ class RateController extends Controller
      $rate = DB::table('rates')
              ->where('idRate',$diff)
              ->pluck('rate');
-      $premi = $rate[0] / 10 * $tsi;
-       return response()->json(['data' => $premi , 'code' => 200],200);
+      $premi = $rate[0] * $tsi;
+       return response()->json([
+                    'data' => [
+                                'premi'   =>  $premi,
+                                'periode' =>  $diff,
+                                'rate'    =>  $rate[0],
+                                'satuan'  =>  'permil'
+                              ],
+                    'code' => 200],200);
    }
 }
