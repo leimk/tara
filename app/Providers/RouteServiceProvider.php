@@ -37,7 +37,7 @@ class RouteServiceProvider extends ServiceProvider
     {
         $this->mapApiRoutes();
 
-        $this->mapWebRoutes();
+        // $this->mapWebRoutes();
 
         //
     }
@@ -65,9 +65,10 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected function mapApiRoutes()
     {
-        Route::prefix('')
+        Route::prefix('taralite/v1')
              ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+             // ->namespace($this->namespace)
+             ->namespace('App\Http\Controllers\Taralite\V1')
+             ->group(base_path('routes/taraliteapiv1.php'));
     }
 }

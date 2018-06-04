@@ -24,7 +24,6 @@ use Illuminate\Http\Request;
 Route::middleware('client')->group( function () {
 	Route::resource('insureds', 'InsuredController',['only' => ['index','store']]);
 	Route::resource('rates', 'RateController',['only' => ['index']]);
-
 	Route::get('rates/premi/{pawal}/{pakhir}/{tsi}',[
 			'as'		=>	'rates.premi.index',
 			'uses'	=>	'RateController@index'

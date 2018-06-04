@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Taralite\V1; // changed from App\Http\Controllers
+
 
 use Illuminate\Http\Request;
 use App\Rate;
@@ -21,7 +22,7 @@ class RateController extends Controller
      $rate = DB::table('rates')
              ->where('idRate',$diff)
              ->pluck('rate');
-      $premi = $rate[0] * 100 * $tsi;
+      $premi = $rate[0] / 10 * $tsi;
        return response()->json(['data' => $premi , 'code' => 200],200);
    }
 }
