@@ -12,4 +12,5 @@ class Endors extends Model
   ];
 
   protected $hidden = ['idEndPeserta','updated_at','created_at'];
+
 }

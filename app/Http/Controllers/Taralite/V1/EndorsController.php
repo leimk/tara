@@ -9,11 +9,12 @@ use App\Endors;
 use App\Insured;
 use Validator;
 use Carbon\Carbon;
-
+use Helper;
 
 
 class EndorsController extends Controller
 {
+
   public function store(Request $request)
    {
        $input = $request->all();
@@ -24,9 +25,7 @@ class EndorsController extends Controller
          return response()->json(['message' => 'Data Not Found', 404],404);
 
        $input['key'] = $request['noKTP'].'|'.$request['periodeAkhir'];
-       $periodeAwal = new Carbon($input['periodeAwal']);
-       $periodeAkhir= new Carbon($input['periodeAkhir']);
-       $diff = $periodeAwal->diff($periodeAkhir);
+       $diff = Helper::diff($input['periodeAwal'],$input['periodeAkhir']);
        $diff = round(($diff->format('%y')*12) + $diff->format('%m') + ($diff->format('%d')/30));
        $input['rate_id'] = $diff;
        $input['id_Peserta'] = $cari[0]->idPesertaTaralite;

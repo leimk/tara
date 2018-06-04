@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 use App\Insured;
 use Validator;
 use Carbon\Carbon;
+use Helper;
 
 class InsuredController extends Controller
 {
@@ -86,9 +87,7 @@ class InsuredController extends Controller
           return response()->json(['message' => 'Terdapat Pinjaman yang masih berjalan dengan No Kontrak : '.$noK, 'noKontrak' => $noKontrak, 422],422);
         }
 
-        $periodeAwal = new Carbon($input['periodeAwal']);
-        $periodeAkhir= new Carbon($input['periodeAkhir']);
-        $diff = $periodeAwal->diff($periodeAkhir);
+        $diff = Helper::diff($input['periodeAwal'],$input['periodeAkhir']);
         $diff = round(($diff->format('%y')*12) + $diff->format('%m') + ($diff->format('%d')/30));
         $input['rate_id'] = $diff;
 

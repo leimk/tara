@@ -19,6 +19,7 @@
         "phpunit/phpunit": "^7.0"
     },
     "autoload": {
+    
         "classmap": [
             "database/seeds",
             "database/factories"
