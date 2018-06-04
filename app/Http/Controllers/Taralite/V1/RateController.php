@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Taralite\V1; // changed from App\Http\Controllers
 
 
 use Illuminate\Http\Request;
-use App\Rate;
 use Illuminate\Support\Facades\DB;
+use App\Rate;
 use Carbon\Carbon;
 
 class RateController extends Controller
