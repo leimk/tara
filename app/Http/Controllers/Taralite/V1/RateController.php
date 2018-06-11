@@ -14,6 +14,8 @@ class RateController extends Controller
    {
      $periodeAwal = new Carbon($pawal);
      $periodeAkhir= new Carbon($pakhir);
+     if($periodeAwal >= $periodeAkhir)
+      return response()->json(['message' => 'Periode Awal >= Periode Akhir', 'code' => 422], 422);
      $diff = $periodeAwal->diff($periodeAkhir);
      $diff = round(($diff->format('%y')*12) + $diff->format('%m') + ($diff->format('%d')/30));
      if($diff > 12){
